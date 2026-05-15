@@ -8,7 +8,7 @@ router.post('/', auth, async (req, res) => {
   try {
     const { subject, message } = req.body;
     const complaint = new Complaint({
-      userId: req.user.id,
+      userId: req.user.userId,
       subject,
       message
     });
