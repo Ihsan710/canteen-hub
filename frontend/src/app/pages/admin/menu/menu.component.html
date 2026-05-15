@@ -1,0 +1,156 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+  <app-navbar></app-navbar>
+
+  <div class="flex flex-1 overflow-hidden relative">
+    <app-sidebar [role]="'Admin'"></app-sidebar>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Food Menu Management</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">Add, edit, or remove items from the canteen menu.</p>
+          </div>
+          <button (click)="openModal()" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-0.5 transition-all">
+            + Add New Item
+          </button>
+        </div>
+
+        <div *ngIf="loading" class="flex justify-center items-center h-64">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        </div>
+
+        <div *ngIf="!loading" class="glass-card overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+              <thead class="bg-gray-50 dark:bg-gray-800/50">
+                <tr>
+                  <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Item</th>
+                  <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</th>
+                  <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Stock</th>
+                  <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                  <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+                <tr *ngFor="let item of menuItems" class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="h-10 w-10 flex-shrink-0 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden">
+                        <img *ngIf="item.image" [src]="item.image" class="h-10 w-10 object-cover">
+                      </div>
+                      <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900 dark:text-white">{{ item.name }}</div>
+                        <div class="text-xs text-gray-500">{{ item.category }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                    ₹{{ item.price | number:'1.2-2' }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-sm" [ngClass]="item.stock > 10 ? 'text-green-500' : (item.stock > 0 ? 'text-orange-500' : 'text-red-500')">
+                      {{ item.stock }} units
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full"
+                          [ngClass]="item.availability ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'">
+                      {{ item.availability ? 'Available' : 'Hidden' }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button (click)="openModal(item)" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-4">Edit</button>
+                    <button (click)="deleteItem(item._id!)" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div *ngIf="isModalOpen" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+  <div class="glass-card bg-white dark:bg-gray-900 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md z-10">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ editingId ? 'Edit Food Item' : 'Add New Item' }}</h2>
+      <button (click)="closeModal()" class="text-gray-400 hover:text-gray-500">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+    
+    <form [formGroup]="menuForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Item Name</label>
+          <input type="text" formControlName="name" class="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+          <select formControlName="category" class="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white">
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Price (₹)</label>
+          <input type="number" formControlName="price" class="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Stock Quantity</label>
+          <input type="number" formControlName="stock" class="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Image URL</label>
+          <input type="text" formControlName="image" class="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900 dark:text-white">
+        </div>
+        
+        <div class="md:col-span-2 mt-4 border-t border-gray-200 dark:border-gray-800 pt-4">
+          <label class="block text-sm font-bold text-gray-900 dark:text-white mb-3">Item Options & Dietary Tags</label>
+          <div class="flex flex-wrap gap-4 items-center">
+            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 dark:bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700">
+              <input type="checkbox" formControlName="availability" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded">
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Available</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 dark:bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700">
+              <input type="checkbox" formControlName="isSpecial" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded">
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Today's Special</span>
+            </label>
+            
+            <div class="h-6 w-px bg-gray-300 dark:bg-gray-700 mx-2 hidden sm:block"></div>
+            
+            <label class="flex items-center gap-2 cursor-pointer bg-green-50 dark:bg-green-900/20 px-3 py-1.5 rounded-lg border border-green-200 dark:border-green-800/30">
+              <input type="checkbox" formControlName="tagVeg" class="h-4 w-4 text-green-600 focus:ring-green-500 rounded">
+              <span class="text-sm font-bold text-green-700 dark:text-green-400">Veg</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer bg-red-50 dark:bg-red-900/20 px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-800/30">
+              <input type="checkbox" formControlName="tagNonVeg" class="h-4 w-4 text-red-600 focus:ring-red-500 rounded">
+              <span class="text-sm font-bold text-red-700 dark:text-red-400">Non-Veg</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer bg-indigo-50 dark:bg-indigo-900/20 px-3 py-1.5 rounded-lg border border-indigo-200 dark:border-indigo-800/30">
+              <input type="checkbox" formControlName="tagGlutenFree" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 rounded">
+              <span class="text-sm font-bold text-indigo-700 dark:text-indigo-400">Gluten-Free</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer bg-orange-50 dark:bg-orange-900/20 px-3 py-1.5 rounded-lg border border-orange-200 dark:border-orange-800/30">
+              <input type="checkbox" formControlName="tagSpicy" class="h-4 w-4 text-orange-600 focus:ring-orange-500 rounded">
+              <span class="text-sm font-bold text-orange-700 dark:text-orange-400">Spicy</span>
+            </label>
+            
+            <label class="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 px-4 py-1.5 rounded-xl border border-orange-300 dark:border-orange-700/50 shadow-sm ml-auto sm:ml-0">
+              <input type="checkbox" formControlName="tagSpecialCombo" class="h-4 w-4 text-orange-600 focus:ring-orange-500 rounded">
+              <span class="text-sm font-extrabold text-orange-700 dark:text-orange-400">✨ Special Combo</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-3">
+        <button type="button" (click)="closeModal()" class="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Cancel</button>
+        <button type="submit" [disabled]="menuForm.invalid" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">Save Item</button>
+      </div>
+    </form>
+  </div>
+</div>

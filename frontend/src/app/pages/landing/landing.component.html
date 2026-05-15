@@ -1,0 +1,253 @@
+<div class="min-h-screen bg-gray-50 dark:bg-slate-950 font-sans selection:bg-indigo-500/30 text-gray-900 dark:text-gray-100 overflow-x-hidden">
+  
+  <!-- Floating Premium Navigation -->
+  <div class="fixed w-full z-50 top-6 px-4 pointer-events-none">
+    <nav class="max-w-5xl mx-auto ultra-glass rounded-full px-6 py-3 pointer-events-auto flex justify-between items-center transition-all duration-500">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/40">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <span class="font-display font-bold text-xl tracking-tight">Canteen<span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">Hub</span></span>
+      </div>
+      
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#features" class="text-sm font-medium text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">Features</a>
+        <a href="#menu" class="text-sm font-medium text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-white transition-colors">Menu</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle -->
+        <button (click)="themeService.toggleTheme()" class="p-2 rounded-full text-gray-500 hover:text-indigo-500 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors" title="Toggle Theme">
+          <svg *ngIf="!themeService.isDarkMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+          <svg *ngIf="themeService.isDarkMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
+
+        <ng-container *ngIf="!authService.currentUserValue">
+          <div class="hidden sm:flex items-center gap-2">
+            <a routerLink="/student-login" class="text-sm font-medium px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-indigo-500 dark:hover:text-white transition-colors">Sign In</a>
+            <a routerLink="/register" class="text-sm font-semibold px-5 py-2.5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:scale-105 transform transition-all shadow-lg shadow-gray-900/20 dark:shadow-white/20">Sign Up</a>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="authService.currentUserValue as user">
+          <a [routerLink]="user.role === 'Admin' ? '/admin/dashboard' : '/student/dashboard'" 
+             class="text-sm font-semibold px-5 py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-400 hover:to-purple-500 transform transition-all shadow-lg shadow-indigo-500/30">
+            Dashboard
+          </a>
+        </ng-container>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Hero Aurora Section -->
+  <div class="relative min-h-[95vh] flex flex-col justify-center pt-32 pb-20 overflow-hidden">
+    <!-- Animated Aurora Background -->
+    <div class="absolute inset-0 overflow-hidden -z-10">
+      <div class="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-indigo-500/20 dark:bg-indigo-600/30 blur-[120px] mix-blend-screen animate-aurora"></div>
+      <div class="absolute top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-fuchsia-500/20 dark:bg-fuchsia-600/30 blur-[120px] mix-blend-screen animate-aurora" style="animation-delay: -5s;"></div>
+      <div class="absolute -bottom-[20%] left-[20%] w-[80%] h-[80%] rounded-full bg-cyan-500/20 dark:bg-cyan-600/30 blur-[120px] mix-blend-screen animate-aurora" style="animation-delay: -10s;"></div>
+    </div>
+
+    <!-- Radial Gradient Overlay for depth -->
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(249,250,251,0.8)_100%)] dark:bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(2,6,23,0.9)_100%)] -z-10"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative w-full">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Hero Text -->
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full ultra-glass mb-8 border-indigo-500/30 text-indigo-600 dark:text-indigo-400 text-sm font-semibold tracking-wide uppercase">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+            </span>
+            Canteen System 2.0 Live
+          </div>
+          
+          <h1 class="font-display text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[1.1] mb-8 text-gray-900 dark:text-white">
+            Skip the line.<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-pink-500 animate-gradient">
+              Savor the time.
+            </span>
+          </h1>
+          
+          <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-lg font-medium">
+            The ultimate premium canteen experience. Order ahead, track your meal in real-time, and pick up instantly. Designed for the modern campus.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a routerLink="/login" class="group relative px-8 py-4 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-lg overflow-hidden flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(15,23,42,0.3)] dark:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-transform hover:scale-105">
+              <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+              Order Now
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </a>
+            <a href="#menu" class="px-8 py-4 rounded-full ultra-glass text-gray-900 dark:text-white font-bold text-lg flex items-center justify-center hover:bg-white/50 dark:hover:bg-white/10 transition-colors">
+              Explore Menu
+            </a>
+          </div>
+        </div>
+        
+        <!-- Premium Composed Mockup -->
+        <div class="relative w-full h-[500px] lg:h-[700px] flex items-center justify-center animate-float">
+          <!-- Main Food Image Glass Frame -->
+          <div class="absolute z-10 w-[80%] h-[70%] ultra-glass overflow-hidden rounded-[2.5rem] shadow-2xl shadow-indigo-500/20 transform rotate-[-2deg]">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2574&auto=format&fit=crop" alt="Delicious Food" class="w-full h-full object-cover scale-110 hover:scale-105 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 text-white">
+              <h3 class="font-display font-bold text-2xl">Signature Grill</h3>
+              <p class="text-white/80 font-medium text-sm">₹250 • Highly Rated</p>
+            </div>
+          </div>
+
+          <!-- Floating UI Elements -->
+          <div class="absolute z-20 -right-4 top-1/4 ultra-glass p-4 pr-6 rounded-2xl flex items-center gap-4 transform rotate-[3deg] hover:rotate-0 transition-transform shadow-2xl">
+            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-green-500/40">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <div>
+              <p class="font-display font-bold text-gray-900 dark:text-white leading-tight">Order Ready!</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Token: A4X9</p>
+            </div>
+          </div>
+
+          <div class="absolute z-20 -left-8 bottom-1/3 ultra-glass p-4 rounded-2xl flex items-center gap-4 transform rotate-[-4deg] hover:rotate-0 transition-transform shadow-2xl">
+            <div class="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/40">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-1">Status</p>
+              <div class="h-2 w-24 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-indigo-500 w-2/3 rounded-full animate-pulse-slow"></div>
+              </div>
+              <p class="font-display font-bold text-gray-900 dark:text-white text-sm mt-1">Preparing...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bento Box Features Section -->
+  <div id="features" class="py-24 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-16">
+        <h2 class="font-display text-4xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tight mb-4">
+          Engineered for <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">Perfection</span>
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">A completely re-imagined canteen workflow designed to eliminate friction.</p>
+      </div>
+      
+      <!-- Bento Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+        
+        <!-- Large Span Feature -->
+        <div class="md:col-span-2 ultra-glass p-10 flex flex-col justify-between group hover:border-indigo-500/50 transition-colors overflow-hidden relative">
+          <div class="absolute -right-20 -top-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl group-hover:bg-indigo-500/20 transition-colors"></div>
+          <div class="z-10 max-w-sm">
+            <div class="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-gray-900 dark:text-white mb-3">Zero Wait Time</h3>
+            <p class="text-gray-600 dark:text-gray-400 font-medium">Pre-order your meals before the bell rings. Walk in, show your token, and walk out. We value every second of your break.</p>
+          </div>
+          <!-- Mock Graphic -->
+          <div class="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4 w-64 h-64 border-[16px] border-indigo-50 dark:border-gray-800 rounded-full">
+            <div class="absolute inset-0 border-[16px] border-indigo-500 rounded-full" style="clip-path: polygon(50% 50%, 50% 0, 100% 0, 100% 100%, 0 100%, 0 50%); transform: rotate(45deg);"></div>
+          </div>
+        </div>
+
+        <!-- Square Feature 1 -->
+        <div class="ultra-glass p-8 flex flex-col justify-between group hover:border-fuchsia-500/50 transition-colors relative overflow-hidden">
+          <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-fuchsia-500/10 rounded-full blur-2xl group-hover:bg-fuchsia-500/20 transition-colors"></div>
+          <div class="z-10">
+            <div class="w-12 h-12 bg-fuchsia-100 dark:bg-fuchsia-900/50 rounded-xl flex items-center justify-center text-fuchsia-600 dark:text-fuchsia-400 mb-6 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-gray-900 dark:text-white mb-2">Secure Payments</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm font-medium">Enterprise-grade encryption for all your transactions.</p>
+          </div>
+        </div>
+
+        <!-- Square Feature 2 -->
+        <div class="ultra-glass p-8 flex flex-col justify-between group hover:border-cyan-500/50 transition-colors relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-colors"></div>
+          <div class="z-10">
+            <div class="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/50 rounded-xl flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-6 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            </div>
+            <h3 class="font-display text-xl font-bold text-gray-900 dark:text-white mb-2">Lightning Fast</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm font-medium">Optimized backend ensuring zero latency during peak hours.</p>
+          </div>
+        </div>
+
+        <!-- Large Span Feature 2 -->
+        <div class="md:col-span-2 ultra-glass p-10 flex flex-col justify-between group hover:border-pink-500/50 transition-colors relative overflow-hidden">
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-pink-500/5 rounded-full blur-3xl group-hover:bg-pink-500/10 transition-colors pointer-events-none"></div>
+          <div class="z-10 flex flex-col md:flex-row items-center justify-between gap-8 h-full">
+            <div class="max-w-sm">
+              <div class="w-14 h-14 bg-pink-100 dark:bg-pink-900/50 rounded-2xl flex items-center justify-center text-pink-600 dark:text-pink-400 mb-6 group-hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-gray-900 dark:text-white mb-3">Live Tracking</h3>
+              <p class="text-gray-600 dark:text-gray-400 font-medium">Know exactly when your food is being prepared. Get instantly notified the second it's ready for pickup.</p>
+            </div>
+            
+            <!-- Mock Notification Stack -->
+            <div class="w-full md:w-64 space-y-3">
+              <div class="bg-white/90 dark:bg-slate-800/90 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3 transform translate-x-4 opacity-50">
+                <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                <div class="h-2 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              </div>
+              <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-lg border border-gray-100 dark:border-gray-700 flex items-center gap-4 z-10 relative">
+                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                </div>
+                <div>
+                  <p class="font-bold text-sm text-gray-900 dark:text-white">Order Preparing</p>
+                  <p class="text-xs text-gray-500">Est. 5 mins remaining</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Premium CTA Footer Section -->
+  <div class="relative mt-20 pt-32 pb-20 overflow-hidden z-0">
+    <!-- Massive curved top -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[200%] bg-gray-900 dark:bg-slate-900 rounded-[100%] border-t border-gray-800 dark:border-slate-800 shadow-[0_-20px_50px_rgba(0,0,0,0.1)] -z-10"></div>
+    
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
+      <h2 class="font-display text-5xl md:text-6xl font-black text-white tracking-tight mb-8">
+        Ready to upgrade your break?
+      </h2>
+      <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+        Join hundreds of students already using the smartest canteen system. Sign up in seconds.
+      </p>
+      
+      <a routerLink="/register" class="inline-block px-10 py-5 rounded-full bg-white text-gray-900 font-bold text-lg hover:scale-105 transform transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+        Create Free Account
+      </a>
+
+      <div class="mt-20 pt-10 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-500 text-sm">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded bg-indigo-500/20 flex items-center justify-center text-indigo-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+          </div>
+          <span class="font-bold text-gray-300">CanteenHub</span>
+        </div>
+        <p>© 2026 CanteenHub Inc. Designed with precision.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
